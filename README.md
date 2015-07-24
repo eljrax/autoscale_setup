@@ -18,7 +18,7 @@ So if your load balancer health check is set to request /health.php and expect a
 Just note that this does NOT take firewalls into account, since the health check runs locally.
 
 Configuration is done in-script toward the top of the file.
-~~
+~~~
 $ python add_node_lb.py
 Node added to LB 147757
 Node added to LB 136249
@@ -27,7 +27,7 @@ Node added to LB 136249
 $ python add_node_lb.py
 Node 10.181.98.11:80 already in LB 147757..
 Node 10.181.98.11:22 already in LB 136249..
-~~
+~~~
 
 remove_dead_nodes.py
 --------------------
@@ -36,14 +36,14 @@ Similarly, if you don't use Autoscale to manage the load balancer for you, it al
 This script is meant to run in a scheduler (such as crontab), and queries the autoscale group for its active nodes. It then gathers all IP addresses of those nodes, and compares them to the IP addresses in the load balancer's node list. 
 If there are any nodes which aren't in the autoscale group but is in the load balancer and is NOT online, those will be drained and on the subsequent execution removed from the loadbalancer pool.
 
-~~
+~~~
 $ python remove_dead_nodes.py
 INFO:root:10.181.98.11 (status: OFFLINE) not found in scaling group or whitelist, draining node in loadbalancer 147757...
 INFO:root:10.181.98.11 (status: OFFLINE) not found in scaling group or whitelist, draining node in loadbalancer 136249...
 $ python remove_dead_nodes.py
 INFO:root:10.181.98.11 (status: OFFLINE) not found in scaling group or whitelist, and is in draining mode - deleting from loadbalancer 147757...
 INFO:root:10.181.98.11 (status: OFFLINE) not found in scaling group or whitelist, and is in draining mode - deleting from loadbalancer 136249...
-~~
+~~~
 You can optionally override this behaviour by instructing the script to not delete nodes as long as they are online, regardless of whether they are in the autoscale group or not.
 There is also a whitelist facility, which prevents those IP addresses from ever being removed, regardless of being present in the autoscale group or status. This is useful if you have permanent nodes, which aren't scaled up or down, but still serve your application.
 
