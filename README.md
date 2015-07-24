@@ -8,7 +8,7 @@ This repository is currently a dumping ground for various scripts and tools I us
 I prefer to use [rax-autoscaler](https://github.com/rackerlabs/rax-autoscaler) with the [raxmon_autoscale plugin](https://github.com/rackerlabs/rax-autoscaler/blob/devel/raxas/core_plugins/raxmon_autoscale.py) in devel branch at the time of writing) to trigger the relevant scaling policy webhooks.
 
 
-add_self_to_lb.py
+load_balancing/add_self_to_lb.py
 -----------------
 If you let Autoscale manage the load balancer for you, it will add nodes as soon as the server is built, potentially before any bootstrapping and configuration has taken place. It will also add it as ENABLED/ONLINE. So if you use a default health check, you run the risk of serving stale or non-existing content for up to 20 seconds. 
 This script lets the nodes add themselves to the load balancer as a final step of a configuration process. 
@@ -19,17 +19,17 @@ Just note that this does NOT take firewalls into account, since the health check
 
 Configuration is done in-script toward the top of the file.
 ~~~
-$ python add_node_lb.py
+$ python load_balancing/add_node_lb.py
 Node added to LB 147757
 Node added to LB 136249
 
 # It's safe to run multiple times
-$ python add_node_lb.py
+$ python load_balancing/add_node_lb.py
 Node 10.181.98.11:80 already in LB 147757..
 Node 10.181.98.11:22 already in LB 136249..
 ~~~
 
-remove_dead_nodes.py
+load_balancing/remove_dead_nodes.py
 --------------------
 Similarly, if you don't use Autoscale to manage the load balancer for you, it also won't remove nodes when they are scaled down. This menas you may hit the 25 node limit reasonably quickly, unless you frequently clean up.
 
@@ -37,10 +37,10 @@ This script is meant to run in a scheduler (such as crontab), and queries the au
 If there are any nodes which aren't in the autoscale group but is in the load balancer and is NOT online, those will be drained and on the subsequent execution removed from the loadbalancer pool.
 
 ~~~
-$ python remove_dead_nodes.py
+$ python load_balancing/remove_dead_nodes.py
 INFO:root:10.181.98.11 (status: OFFLINE) not found in scaling group or whitelist, draining node in loadbalancer 147757...
 INFO:root:10.181.98.11 (status: OFFLINE) not found in scaling group or whitelist, draining node in loadbalancer 136249...
-$ python remove_dead_nodes.py
+$ python load_balancing/remove_dead_nodes.py
 INFO:root:10.181.98.11 (status: OFFLINE) not found in scaling group or whitelist, and is in draining mode - deleting from loadbalancer 147757...
 INFO:root:10.181.98.11 (status: OFFLINE) not found in scaling group or whitelist, and is in draining mode - deleting from loadbalancer 136249...
 ~~~
