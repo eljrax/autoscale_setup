@@ -1,3 +1,8 @@
+# Credentials
+.cloud_credentials
+config.ini
+cloud-init.yml
+*.swp
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

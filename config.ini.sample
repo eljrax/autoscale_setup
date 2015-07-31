@@ -1,0 +1,64 @@
+[cloud]
+; Your Rackspace cloud username (required, string)
+username = ''
+; Your rackspace API key (required, string)
+api_key = ''
+; The region in which you wish to operate (required, string)
+region = ''
+
+[autoscale]
+; You can provide an ID to a scaling group, and the config below
+; will be compared to the running config. If differences are 
+; detected, you can optionally sync them. If you leave this 
+; parameter out, a new group will be created with the config below
+; and this value will be populated automaticaly  (optional, string)
+;id = ''
+; Name of autoscale group (required, string)
+name = 'autoscale_group'
+; Number of servers to scale up by (required, integer)
+scale_up = 2
+; Number of servers to scale down by (required, integer)
+scale_down = 2 
+; Max number of servers to scale up to (required, integer)
+max_entities = 16 
+; Minimum number of servers to scale down to (required, integer)
+min_entities = 2
+; Cooldown for scaling policies. Scaling won't happen with higher frequency
+; than this value (required, integer (seconds))
+cooldown = 10
+
+
+; This section describes the launch configuration for servers that will be
+; scaled up by the policies in this group. See this link for more information
+; on launch configuration:
+; http://docs.rackspace.com/cas/api/v1.0/autoscale-devguide/content/PUT_putLaunchConfig_v1.0__tenantId__groups__groupId__launch_Configurations.html
+
+[launch-configuration]
+; Name of servers (an 11 character long unique string will be appended to this)
+; (required, string)
+name = 'autoscaled_server'
+; ID of the flavor that the servers will be booted with.
+; see 'nova flavor-list'  (required, string)
+flavor = 'performance1-1'
+; ID of the image that the servers will be booted with
+; see 'nova image-list' (required, string)
+image = '09de0a66-3156-48b4-90a5-1cf25a905207'
+; All rackspace servers are by default provisioned with two networks, PublicNet and ServiceNet
+; you can chose to skip provisioning of these networks. But be aware you will not be able to use
+; many services, such as backups, dbaas, lbaas etc. All Rackspace managed servers require these networks!
+; (optional, boolean)
+skip_default_networks = False
+; Comma separated list of cloud network names to attach to the servers in addition to the default ones (optional, string)
+;networks = 'my_network, my_other_network'
+; The name of a keypair on your account, which will be put on the servers (optional, string) 
+;key_name = 'my_ssh_key'
+; Disk config method. This is image-dependent, make sure 
+; the image you use supports the disk config method you chose. Default is MANUAL (optional, string (MANUAL, or AUTO))
+disk_config = 'MANUAL'
+; Path to a file containing a plain-text cloud-init YAML file (optional, string)
+;cloud_init = '/path/to/cloud-init.yaml'
+; Metadata key-value pairs that will be applied to the instances (optional, dictionary)
+; Note, that once set, it can only be changed, not unset altogether!
+; format: { 'key': 'value', 'another_key': 'another_value' }
+;metadata = { 'k': 'v', 'k2': 'v3' }
+
