@@ -56,7 +56,7 @@ skip_default_networks = False
 ; the image you use supports the disk config method you chose. Default is MANUAL (optional, string (MANUAL, or AUTO))
 disk_config = 'MANUAL'
 ; Path to a file containing a plain-text cloud-init YAML file (optional, string)
-;cloud_init = '/path/to/cloud-init.yaml'
+;cloud_init = '/path/to/cloud-init.yml'
 ; Metadata key-value pairs that will be applied to the instances (optional, dictionary)
 ; Note, that once set, it can only be changed, not unset altogether!
 ; format: { 'key': 'value', 'another_key': 'another_value' }
