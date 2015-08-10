@@ -1,3 +1,13 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; It is recommended to populate             ;
+; the config file using the utility itself. ;
+; Simply fill in the [cloud] section below  ;
+; and remove everything else and launch     ;
+; main.py, and you will be prompted for all ;
+; the variables below in a user-friendly    ;
+; manner                                    ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 [cloud]
 ; Your Rackspace cloud username (required, string)
 username = ''
@@ -5,7 +15,14 @@ username = ''
 api_key = ''
 ; The region in which you wish to operate (required, string)
 region = ''
+; Optionally you can specify a file containing credentials on this form
+; [rackspace_cloud]
+; username = 
+; api_key = 
+; region =
+;; credentials_file = ''
 
+;;;;;;;;;;;;;;;;;;; Remove everything below this to be prompted ;;;;;;;;;;;;;;;;;;;
 [autoscale]
 ; You can provide an ID to a scaling group, and the config below
 ; will be compared to the running config. If differences are 
@@ -48,17 +65,33 @@ image = '09de0a66-3156-48b4-90a5-1cf25a905207'
 ; many services, such as backups, dbaas, lbaas etc. All Rackspace managed servers require these networks!
 ; (optional, boolean)
 skip_default_networks = False
-; Comma separated list of cloud network names to attach to the servers in addition to the default ones (optional, string)
-;networks = 'my_network, my_other_network'
+; Comma separated list of cloud network names to attach to the servers in addition to the default ones (optional, list)
+;networks = [ 'network-1-uuid', 'network-2-uuid' ]
 ; The name of a keypair on your account, which will be put on the servers (optional, string) 
 ;key_name = 'my_ssh_key'
 ; Disk config method. This is image-dependent, make sure 
 ; the image you use supports the disk config method you chose. Default is MANUAL (optional, string (MANUAL, or AUTO))
 disk_config = 'MANUAL'
-; Path to a file containing a plain-text cloud-init YAML file (optional, string)
-;cloud_init = '/path/to/cloud-init.yml'
+; Path to a file containing a jinja template of cloud-init YAML file. The
+; default might suffice (required, string)
+; cloud_init = 'templates/cloud-init.yml.j2'
 ; Metadata key-value pairs that will be applied to the instances (optional, dictionary)
 ; Note, that once set, it can only be changed, not unset altogether!
 ; format: { 'key': 'value', 'another_key': 'another_value' }
 ;metadata = { 'k': 'v', 'k2': 'v3' }
+
+[rax-autoscaler]
+; List of load balancers that the nodes will add themselves to when booted up (required, list)
+; format [lb_id, another_lb_id]
+load_balancers = []
+; Path to private key. This key will be embedded in the cloud-init script and
+; put on the autoscaled servers. This key is used to download the Ansible
+; playbook (or other configuration management) from the admin server
+private_key = '' 
+; IP address or hostname of server from where the autoscaled server will fetch
+; their bootstrap configuration from (see templates/cloud-init.yml.j2),
+; The key defined in private_key above should provide
+; access to this server as the 'autoscale' user. (required, string)
+admin_server = ''
+
 

@@ -3,6 +3,7 @@
 config.ini
 cloud-init.yml
 *.swp
+.ropeproject
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

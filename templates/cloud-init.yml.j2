@@ -1,0 +1,17 @@
+#cloud-config
+
+packages:
+  - python-pip
+  - python-dev
+
+write_files:
+  - path: /root/.ssh/id_rsa
+    permissions: 0600
+    owner: root:root
+    encoding: b64
+    content: {{ private_key }} 
+
+runcmd:
+  - pip install ansible pyrax
+  - rsync -ave "ssh -oStrictHostKeyChecking=no" autoscale@{{ admin_server }}:/home/autoscale/payload/ /opt/autoscale/
+  - ansible-playbook -i /opt/autoscale/playbook/hosts /opt/autoscale/playbook/site.yml --connection=local
