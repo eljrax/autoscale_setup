@@ -202,7 +202,14 @@ def get_object_from_list(obj, name, create_new_option=False,
     """
     cnt = 0
     index = {}
-    for entry in obj.list():
+    objects = []
+    try:
+        # Most objects have a list_all method, but fall back to .list() if not
+        objects = obj.list_all()
+    except AttributeError:
+        objects = obj.list()
+
+    for entry in objects:
         cnt += 1
         print "%d - %s (%s)" % (cnt, entry.name, entry.id)
         index[cnt] = entry.id
