@@ -8,6 +8,20 @@ This repository is currently a dumping ground for various scripts and tools I us
 I prefer to use [rax-autoscaler](https://github.com/rackerlabs/rax-autoscaler) with the [raxmon_autoscale plugin](https://github.com/rackerlabs/rax-autoscaler/blob/devel/raxas/core_plugins/raxmon_autoscale.py) in devel branch at the time of writing) to trigger the relevant scaling policy webhooks.
 
 
+Autoscaler - main.py
+================
+
+To get started, run:
+```
+pip install -r requirements.txt
+vim config.ini.sample
+cp config.ini.sample /opt/autoscale/autoscaler.ini
+./main.py
+```
+Alternatively you can save the file somewhere else and specify the
+--config-file parameter when executing main.py
+
+
 load_balancing/add_self_to_lb.py
 -----------------
 If you let Autoscale manage the load balancer for you, it will add nodes as soon as the server is built, potentially before any bootstrapping and configuration has taken place. It will also add it as ENABLED/ONLINE. So if you use a default health check, you run the risk of serving stale or non-existing content for up to 20 seconds. 

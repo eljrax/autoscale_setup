@@ -6,6 +6,10 @@
 ; main.py, and you will be prompted for all ;
 ; the variables below in a user-friendly    ;
 ; manner                                    ;
+;                                           ;
+; This should then be put in                ;
+; /opt/autoscale/autoscaler.ini or be       ;
+; specified with --config-file to main.py   ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 [cloud]
