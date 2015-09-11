@@ -67,11 +67,13 @@ def main():
                              auto_scale.get_webhook_url(scale_up))
     config.set_config_option('rax-autoscaler', 'scale_down_webhook',
                              auto_scale.get_webhook_url(scale_down))
-    config.set_config_option('rax-autoscaler', 'scale_down_policy',
-                             auto_scale.get_scale_up_policy().id)
     config.set_config_option('rax-autoscaler', 'scale_up_policy',
+                             auto_scale.get_scale_up_policy().id)
+    config.set_config_option('rax-autoscaler', 'scale_down_policy',
                              auto_scale.get_scale_down_policy().id)
     config.set_config_option('autoscale', 'id', auto_scale.get_id())
+
+    create_config.generate_rax_as_config(config)
 
 if __name__ == '__main__':
     main()

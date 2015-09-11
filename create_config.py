@@ -4,6 +4,8 @@
 """
 import utils
 from colors import bcolors, print_msg
+from jinja2 import Environment
+import os
 
 
 def write_config(config, pyrax):
@@ -184,3 +186,40 @@ def write_config(config, pyrax):
     # Re-parse the file on-disk and validate
     config.parse_config()
     config.validate()
+
+
+def generate_rax_as_config(config):
+    input_template = os.getcwd() + '/templates/rax-autoscaler.json.j2'
+    output_file = os.getcwd() + '/rax-autsocaler-config.json'
+    try:
+        with open(input_template, 'r') as fp:
+            j2_env = Environment().from_string(fp.read())
+    except IOError as ex:
+        print_msg("Failed to open rax-autoscaler config template: %s" % ex,
+                  bcolors.FAIL)
+        exit(1)
+
+    scale_up_policy = config.cfg.get('rax-autoscaler',
+                                     'scale_up_policy').strip("'")
+    scale_down_policy = config.cfg.get('rax-autoscaler',
+                                       'scale_down_policy').strip("'")
+    load_balancers = config.cfg.get('rax-autoscaler',
+                                    'load_balancers').strip("'")
+    autoscale_group = config.as_config.id.strip("'")
+
+    t = j2_env.render(username=config.username,
+                      api_key=config.api_key,
+                      region=config.region,
+                      autoscale_group=autoscale_group,
+                      scale_up_policy=scale_up_policy,
+                      scale_down_policy=scale_down_policy,
+                      load_balancers=load_balancers)
+
+    try:
+        with open(output_file, 'r+') as fp:
+            fp.write(t)
+            print_msg("Wrote rax-autoscaler to file %s" % output_file,
+                      bcolors.OKGREEN)
+    except IOError as ex:
+        print_msg("Failed to write rax-autoscaler config: %s" % ex,
+                  bcolors.FAIL)
