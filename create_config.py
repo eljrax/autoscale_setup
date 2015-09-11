@@ -84,7 +84,10 @@ def write_config(config, pyrax):
 
     if not config.lc_config.key_name:
         key_name = utils.get_object_from_list(
-            pyrax.cloudservers.keypairs, "ssh-key", create_new_option=True)
+            pyrax.cloudservers.keypairs, "ssh-key to add to"
+                                         " /root/.ssh/authorized_keys on"
+                                         " the servers",
+                                         create_new_option=True)
         if key_name is None:
             key_name = utils.add_new_key(pyrax)
         config.set_config_option('launch-configuration', 'key_name', key_name)
