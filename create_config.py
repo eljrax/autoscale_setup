@@ -190,7 +190,7 @@ def write_config(config, pyrax):
 
 def generate_rax_as_config(config):
     input_template = os.getcwd() + '/templates/rax-autoscaler.json.j2'
-    output_file = os.getcwd() + '/rax-autsocaler-config.json'
+    output_file = os.getcwd() + '/rax-autoscaler-config.json'
     try:
         with open(input_template, 'r') as fp:
             j2_env = Environment().from_string(fp.read())
@@ -216,7 +216,7 @@ def generate_rax_as_config(config):
                       load_balancers=load_balancers)
 
     try:
-        with open(output_file, 'r+') as fp:
+        with open(output_file, 'w+') as fp:
             fp.write(t)
             print_msg("Wrote rax-autoscaler to file %s" % output_file,
                       bcolors.OKGREEN)
