@@ -14,4 +14,5 @@ write_files:
 runcmd:
   - pip install ansible pyrax
   - rsync -ave "ssh -oStrictHostKeyChecking=no" autoscale@{{ admin_server }}:/home/autoscale/payload/ /opt/autoscale/
+  - echo -e "[defaults]\nlog_path=/var/log/ansible.log" > /root/.ansible.cfg
   - ansible-playbook -i /opt/autoscale/playbook/hosts /opt/autoscale/playbook/site.yml --connection=local
