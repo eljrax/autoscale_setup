@@ -13,7 +13,7 @@ class LaunchConfig(object):
     key_name = None
     disk_config = None
     cloud_init = ''
-    metadata = {'rax-autoscaler-setup': '1.0'}
+    metadata = {'rax-autoscaler-setup': '1.0', 'build_config_v2': 'support_user'}
     flavor = None
     image = None
     user_data = None
