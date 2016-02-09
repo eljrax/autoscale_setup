@@ -7,8 +7,8 @@
     In that case, rax-autoscaler will refuse to scale down, and we should be
     alerted in that scenario.
 
-    Set up a normal cloud monitor check of type agent.plugin (API only), and
-    an alert if the metric is 1.
+    Set up a normal cloud monitor check on the server running rax-autoscaler
+    of type agent.plugin (API only), and add an alert if the metric is 1.
 
     This is completely optional, and you may have other ways of being alerted
     in the event of servers failing to be bootstrapped.

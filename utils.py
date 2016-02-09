@@ -100,6 +100,7 @@ class AutoscalerConfig(object):
     load_balancers = None
     private_key = None
     admin_server = None
+    num_static_servers = None
 
     def validate(self):
         """ Iterates over class attributes and verifies that they have been set
@@ -114,7 +115,8 @@ class AutoscalerConfig(object):
 
         expected_strs = ['private_key', 'admin_server']
         for obj in [obj for obj in dir(self) if not obj.startswith('__')]:
-            if not isinstance(getattr(self, obj), str) and obj in expected_strs:
+            if not isinstance(getattr(
+                    self, obj), str) and obj in expected_strs:
                 raise AttributeError("Config file validation failed - key"
                                      " %s is missing or has no value"
                                      " in section 'rax-autoscaler'"

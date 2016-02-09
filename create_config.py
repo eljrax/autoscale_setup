@@ -166,6 +166,13 @@ def write_config(config, pyrax):
         config.set_config_option(
             'rax-autoscaler', 'load_balancers', load_balancers)
 
+    if not isinstance(config.ras_config.num_static_servers, int):
+        num_static_servers = utils.ask_integer(
+            "How many nodes in the load balancer are"
+            " not part of the scaling group? (0 for none): ")
+        config.set_config_option('rax-autoscaler', 'num_static_servers',
+                                 num_static_servers)
+
     if not isinstance(config.ras_config.private_key, str) or \
        not utils.is_readable(config.ras_config.private_key):
         print("When scaled up, the servers need to log in to the admin server"
@@ -207,13 +214,17 @@ def generate_rax_as_config(config):
                                     'load_balancers').strip("'")
     autoscale_group = config.as_config.id.strip("'")
 
+    num_static_servers = config.cfg.get('rax-autoscaler',
+                                        'num_static_servers')
+
     t = j2_env.render(username=config.username,
                       api_key=config.api_key,
                       region=config.region,
                       autoscale_group=autoscale_group,
                       scale_up_policy=scale_up_policy,
                       scale_down_policy=scale_down_policy,
-                      load_balancers=load_balancers)
+                      load_balancers=load_balancers,
+                      num_static_servers=num_static_servers)
 
     try:
         with open(output_file, 'w+') as fp:
