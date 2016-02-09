@@ -23,9 +23,8 @@
 # do_nothing), it will reset counters and alert file.
 # ============================================================ #
 
-# Please set this variable accordingly with your setup
-MAXFAILURES=15
-
+# Please set this variable accordingly with your setup:
+#
 # MAXFAILURES should be calculated in this way:
 # ((av_time_new_server_ready / rax-autoscaler_cron_time)) x2 
 # 
@@ -36,17 +35,19 @@ MAXFAILURES=15
 # 15 minutes average time to have a server built and configured
 # rax-autoscaler set in cron to run every 2 minutes
 # this means => ~7-8 runs x 2 = 14-16 MAXFAILURES 
-# ============================================================ #
 
+MAXFAILURES=15
+
+# ============================================================ #
 
 # Define log files
 FAIL_FILE=/tmp/rax_autoscale_failure
-LOG_FAILURES=/tmp/rax_autoscale_failures_report
+FAIL_COUNT=/tmp/rax_autoscale_fails
 TMP_LOG_FILE=$(mktemp)
 RAX_LOG_FILE=/var/log/rax-autoscaler/logging.log
 
-touch $LOG_FAILURES
-FAILS=$(cat $LOG_FAILURES)
+touch $FAIL_COUNT
+FAILS=$(cat $FAIL_COUNT)
 [[ -z "$FAILS" ]] && FAILS=0
 
 # Execute rax-autoscaler and get the output
@@ -56,14 +57,13 @@ FAILS=$(cat $LOG_FAILURES)
 # if "Consensus was to scale down" found => log +1 failure
 # for any other output => reset all
 
-if [[ $(grep "Consensus was to scale down" $TMP_LOG_FILE) ]]
-    then
-	((FAILS++))
-	echo $FAILS > $LOG_FAILURES
-    else 
-	FAILS=0
-	rm -f $LOG_FAILURES > /dev/null 2>&1
-	rm -f $FAIL_FILE > /dev/null 2>&1
+if [[ $(grep "Consensus was to scale down" $TMP_LOG_FILE) ]] ; then
+    ((FAILS++))
+    echo $FAILS > $FAIL_COUNT
+else 
+    FAILS=0
+    rm -f $FAIL_COUNT > /dev/null 2>&1
+    rm -f $FAIL_FILE > /dev/null 2>&1
 fi
 
 
