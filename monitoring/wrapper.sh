@@ -24,7 +24,7 @@
 # ============================================================ #
 
 # Please set this variable accordingly with your setup
-MAXFAILURES=3
+MAXFAILURES=15
 
 # MAXFAILURES should be calculated in this way:
 # ((av_time_new_server_ready / rax-autoscaler_cron_time)) x2 
